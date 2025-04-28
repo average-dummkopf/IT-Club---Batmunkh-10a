@@ -1,0 +1,138 @@
+<html>
+    <head>
+        <title>Kareermon</title>
+        <style>
+            .blep {
+                height: 200px;
+                width: 200px;
+                background-color: whitesmoke;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 100px;
+                font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+                user-select: none;
+            }
+
+            .blep:hover {
+                background-color: rgba(255, 0, 0, 0.2); /* Slight hover effect for better UX */
+            }
+
+            .main {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 5px; 
+                height: 610px;
+                width: 610px;
+                background-color: lightgray;
+            }
+            #winBoard {
+                position: absolute;
+                height: 500px;
+                width: 800px;
+                background-color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                font-size: 100px;
+                font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            }
+
+            
+        </style>
+    </head>
+    
+    <body class="body" style="background-color: whitesmoke; display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <!--
+            This is the library for all the classes and IDs used. I used noises so refer to this if you're not sure abt which one's which.
+            a - The move count used for determining the player
+            b - The current player
+            
+            
+            blep - The containers/boxes of the TicTacToe grid
+            blepes - The array of all the bleps
+            main - The main container for the bleps
+            boop - The function that handles the click event on the bleps
+            resetBoard - The function that resets the board after a win or draw
+            checkWin - The function that checks if a player has won the game
+            blap - The array of winning combinations
+            combination - The array of winning combinations for the game
+            -->
+        <div id="main" , class="main">
+            <div class="blep" id="blep1"></div>
+            <div class="blep" id="blep2"></div>
+            <div class="blep" id="blep3"></div>
+            <div class="blep" id="blep4"></div>
+            <div class="blep" id="blep5"></div>
+            <div class="blep" id="blep6"></div>
+            <div class="blep" id="blep7"></div>
+            <div class="blep" id="blep8"></div>
+            <div class="blep" id="blep9"></div>
+        </div>
+        <div id="winBoard">
+            <p id="winP"></p>
+            <button id= "bkak" style="font-size: 50px; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Play Again</button>
+        </div>
+        <script>
+            let a, b;
+            a = 1;
+            b = "o";
+            document.getElementById("winBoard").style.visibility = "hidden";
+
+            document.getElementById("bkak").addEventListener("click", () => {
+                document.getElementById("winBoard").style.visibility = "hidden";
+                resetBoard();
+            });
+
+            const blap = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6]
+            ];
+
+            const blepes = document.getElementsByClassName("blep");
+
+            for (let i = 0; i < blepes.length; i++) {
+                blepes[i].addEventListener("click", boop);
+            }
+            
+            function boop() {
+                if (this.innerHTML.trim() === "") {
+                    a = a + 1;
+                    b = a % 2 === 0 ? "x" : "o";
+                    this.innerHTML = b;
+
+                    setTimeout(() => {
+                        if (checkWin(b)) {
+                            document.getElementById("winBoard").style.visibility = "visible";
+                            document.getElementById("winP").innerHTML = b + " wins!";
+                            resetBoard();
+                        } else if (a > 9) {
+                            document.getElementById("winBoard").style.visibility = "visible";
+                            document.getElementById("winP").innerHTML = " It's a draw!";
+                            resetBoard();
+                        }
+                    }, 0);
+                }
+            }
+
+            function resetBoard() {
+                for (let i = 0; i < blepes.length; i++) {
+                    blepes[i].innerHTML = "";
+                }
+                a = 1;
+                b = "o";
+            }
+
+            function checkWin(player) {
+                return blap.some(combination => {return combination.every(index => {return blepes[index].innerHTML.trim() === player;});});
+            }
+        </script>
+    </body>
+</html>
